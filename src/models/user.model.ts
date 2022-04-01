@@ -1,10 +1,16 @@
-import {Schema, model, Document} from 'mongoose';
+import {Schema, model} from 'mongoose';
 import bcrypt from 'bcrypt';
 import config from 'config';
-export interface UserDocument{
+import mongoose from 'mongoose';
+
+export interface UserInput{
     email: string;
     name: string;
     password: string;
+
+}
+export interface UserDocument extends UserInput, mongoose.Document{
+
     createdAt: Date;
     upDatedAt: Date,
     comparePassword(candidatePassword: string): Promise<Boolean>
@@ -44,6 +50,6 @@ userSchema.methods.comparePassword = async function(candidatePassword: string):P
         return false;
     }
 }
-const UserModel = model("User", userSchema);
+const UserModel = model<UserDocument>("User", userSchema);
 
 export default UserModel
